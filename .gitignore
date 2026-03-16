@@ -203,3 +203,31 @@ blob-report/
 # yarn.lock
 # pnpm-lock.yaml
 # bun.lockb
+
+#################################################
+# EXTRA PROTECTIONS FOR NEXT.JS / FRONTEND
+#################################################
+
+# Turbopack cache
+.turbo/
+
+# Next.js internal cache
+.next/cache/
+.next/static/
+
+# Vercel build artifacts
+.vercel_build_output/
+
+# Package manager caches
+.pnpm-store/
+.yarn/cache/
+.yarn/unplugged/
+
+# Build archives
+*.tgz
+*.tar.gz
+
+# Temporary runtime files
+*.tmp
+*.temp
+*.pid
