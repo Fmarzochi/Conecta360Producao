@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import "../styles/globals.css";
-import Navbar from "../components/navbar/Navbar";
-import Footer from "../components/footer/Footer";
+import "@/styles/globals.css";
+import Navbar from "@/components/navbar/Navbar";
+import Footer from "@/components/footer/Footer";
 
 export const metadata: Metadata = {
   title: "Conecta 360º | Consultoria Integrada",
