@@ -2,7 +2,6 @@ export * from '@conecta360/config';
 export * from '@conecta360/database';
 
 import { Express } from 'express';
-import { tenantMiddleware } from '@conecta360/database';
 import { loadConfig } from '@conecta360/config';
 
 /**
@@ -11,5 +10,4 @@ import { loadConfig } from '@conecta360/config';
  */
 export const initializeApp = (app: Express) => {
   loadConfig();
-  app.use(tenantMiddleware);
 };
