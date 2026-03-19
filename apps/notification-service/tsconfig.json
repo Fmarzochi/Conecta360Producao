@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "lib": ["ES2022", "DOM"],
+    "sourceMap": true,
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "baseUrl": ".",
+    "paths": {
+      "@conecta360/config": ["../../packages/config/src/index.ts"],
+      "@conecta360/utils": ["../../packages/utils/src/index.ts"],
+      "@conecta360/database": ["../../packages/database/src/index.ts"]
+    }
+  },
+  "include": ["src/**/*", "../../packages/config/src/**/*", "../../packages/utils/src/**/*", "../../packages/database/src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
