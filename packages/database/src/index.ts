@@ -37,5 +37,5 @@ export const tenantPrisma = prisma.$extends({
 });
 
 export { tenantContext, getTenantId };
-export * from './decorators';
+export * from './decorators/public';
 export * from './tenant.interceptor';

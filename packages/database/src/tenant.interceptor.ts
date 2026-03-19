@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
-import { IS_PUBLIC_KEY } from './decorators';
+import { IS_PUBLIC_KEY } from './decorators/public';
 import { tenantContext } from './tenant-context';
 
 @Injectable()
