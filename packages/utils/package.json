@@ -1,0 +1,18 @@
+{
+  "name": "@conecta360/utils",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@conecta360/database": "*",
+    "@conecta360/config": "*",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "typescript": "^5.0.0"
+  }
+}
