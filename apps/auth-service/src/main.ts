@@ -1,17 +1,16 @@
-import express from 'express';
+import 'reflect-metadata';
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
 import { initializeApp } from '@conecta360/utils';
 
-const app = express();
-const port = process.env.PORT || 3001;
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  
+  const expressApp = app.getHttpAdapter().getInstance();
+  initializeApp(expressApp);
 
-app.use(express.json());
-
-initializeApp(app);
-
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', message: 'Auth Service is running' });
-});
-
-app.listen(port, () => {
+  const port = process.env.PORT || 3001;
+  await app.listen(port);
   console.log(`Auth Service inicializado na porta ${port}`);
-});
+}
+bootstrap();

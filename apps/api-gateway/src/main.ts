@@ -1,17 +1,19 @@
-import express from 'express';
+import 'reflect-metadata';
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
 import { initializeApp } from '@conecta360/utils';
 
-const app = express();
-const port = process.env.PORT || 3000;
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  
+  // O initializeApp já carrega o .env usando a lógica local-primeiro
+  // Mas no NestJS, poderíamos inicializar o config antes do bootstrap.
+  // Por enquanto, mantemos a compatibilidade.
+  const expressApp = app.getHttpAdapter().getInstance();
+  initializeApp(expressApp);
 
-app.use(express.json());
-
-initializeApp(app);
-
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', message: 'API Gateway is running' });
-});
-
-app.listen(port, () => {
+  const port = process.env.PORT || 3000;
+  await app.listen(port);
   console.log(`API Gateway inicializado na porta ${port}`);
-});
+}
+bootstrap();
