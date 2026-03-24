@@ -6,6 +6,10 @@ export interface ICompany extends Document {
     tradeName: string;
     cnpj: string;
     corporateEmail: string;
+    phoneNumber: string;
+    industry: string;
+    companySize: string;
+    plan: 'FREE' | 'PREMIUM';
     status: 'ACTIVE' | 'INACTIVE';
 }
 
@@ -15,7 +19,11 @@ const CompanySchema = new Schema<ICompany>({
     tradeName: { type: String, required: true },
     cnpj: { type: String, required: true, unique: true }, 
     corporateEmail: { type: String, required: true },
+    phoneNumber: { type: String },
+    industry:  { type: String },
+    companySize: { type: String },
+    plan: { type: String, enum: ['FREE', 'PREMIUM'], default: 'FREE' },
     status: { type: String, enum: ['ACTIVE', 'INACTIVE'], default: 'ACTIVE' }
 }, { timestamps: true });
 
-export const CompanyModel = model<ICompany>('user', CompanySchema);
+export const CompanyModel = model<ICompany>('companies', CompanySchema);

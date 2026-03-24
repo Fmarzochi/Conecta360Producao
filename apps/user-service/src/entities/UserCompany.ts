@@ -1,7 +1,7 @@
 import { Document, model, Schema, Types } from 'mongoose';
 
 export interface IUserCompany extends Document {
-    tenantId: Types.ObjectId;
+    tenantId?: Types.ObjectId;
     userId: Types.ObjectId;
     companyId: Types.ObjectId;
     relationshipType: 'OWNER' | 'EMPLOYEE' | 'PARTNER';
@@ -9,8 +9,8 @@ export interface IUserCompany extends Document {
 }
 
 const UserCompanySchema = new Schema<IUserCompany>({
-    tenantId: { type: Schema.Types.ObjectId, ref: 'tenants', required: true, index: true },
-    userId: { type: Schema.Types.ObjectId, ref: 'users', required: true },
+    tenantId: { type: Schema.Types.ObjectId, ref: 'tenants', index: true },
+    userId: { type: Schema.Types.ObjectId, ref: 'users'},
     companyId: { type: Schema.Types.ObjectId, ref: 'companies', required: true },
     relationshipType: { 
     type: String, 
@@ -20,6 +20,4 @@ const UserCompanySchema = new Schema<IUserCompany>({
   status: { type: String, default: 'ACTIVE' }
 }, { timestamps: true })
 
-UserCompanySchema.index({ userId: 1, companyId: 1 }, { unique: true });
-
-export const UserCompanyModel = model<IUserCompany>('user', UserCompanySchema);
+export const UserCompanyModel = model<IUserCompany>('user-companies', UserCompanySchema);

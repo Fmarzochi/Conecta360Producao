@@ -1,13 +1,15 @@
 import { Router } from 'express';
 import { CreateUserPFController } from '../controllers/CreateUserPFController';
-import { CreateUserPFService } from 'src/services/CreateUserPFServices';
+import { CreateUserPJController } from '../controllers/CreateUserPJController';
 
 const userRoutes = Router();
 
-// const user = new UserModel();
-// const userService = new CreateUserPFService(user);
-const userController = new CreateUserPFController();
+const createUserPFController = new CreateUserPFController();
+const createUserPJController = new CreateUserPJController();
 
-userRoutes.post('/register', (req, res) =>  userController.handle(req, res));
+
+userRoutes.post('/register', (req, res) =>  createUserPFController.handle(req, res));
+userRoutes.post('/register-company', (req, res) =>  createUserPJController.handle(req, res));
+
 
 export default userRoutes;

@@ -1,5 +1,6 @@
+
 export interface CreateUserPJDto {
-    tenantId: string;
+    tenantId?: string;
     user: {
         email: string;
         password: string;
@@ -12,5 +13,9 @@ export interface CreateUserPJDto {
         cnpj: string;
         corporateEmail: string;
         phoneNumber?: string;
+        industry: string;
+        companySize: string;
+        plan: string;
+        status: string;
     }
 }
