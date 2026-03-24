@@ -1,7 +1,24 @@
 export interface OptionalUserPFDTO {
-    address: { street: string; number: string; city: string; state: string; cep: string; };
-    pcd: { hasDisability: string; disabilityType: string; cid: string; };
-    resume: { fileUrl: string; fileName: string; };
+    address: { 
+        street: string; 
+        number: string; 
+        city: string; 
+        state: string; 
+        cep: string; 
+        complement: string;
+        district: string;
+        country: string;
+    };
+    pcd: { 
+        hasDisability: string; 
+        disabilityType: string; 
+        cid: string; 
+        conditionDescription: string;
+    };
+    resume: { 
+        fileUrl: string; 
+        fileName: string; 
+    };
 }
 
 export interface CreateUserPFDTO extends OptionalUserPFDTO {
@@ -12,4 +29,6 @@ export interface CreateUserPFDTO extends OptionalUserPFDTO {
     cpf: string;
     birthDate?: Date;
     phoneNumber?: number;
+    relationshipType?: string;
+    companyId?: string;
 }
