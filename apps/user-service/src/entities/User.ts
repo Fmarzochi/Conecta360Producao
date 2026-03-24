@@ -6,12 +6,16 @@ export interface IUserAddress {
     city: string,
     state: string,
     cep: string,
+    complement: string,
+    district: string,
+    country: string,
 }
 
 export interface IUserPCD {
     hasDisability: string,
     disabilityType: string,
     cid: string,
+    conditionDescription: string,
 }
 
 export interface IUserResume {
@@ -50,11 +54,15 @@ const UserSchema = new Schema<IUser>({
         city: { type: String },
         state: { type: String },
         cep: { type: String },
+        complement: { type: String },
+        district: { type: String },
+        country: { type: String },
     },
     pcd: {
         hasDisability: { type: String },
         disabilityType: { type: String },
         cid: { type: String },
+        conditionDescription: { type: String }
     },
     resume: {
         fileUrl: { type: String },
