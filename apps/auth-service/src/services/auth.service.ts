@@ -41,9 +41,6 @@ export class AuthService {
     return result;
   }
 
-  /**
-   * Gera access token e refresh token após validação bem-sucedida.
-   */
   async login(user: any): Promise<LoginResponse> {
     const { id, email, name, role, tenantId } = user;
     const payload = {
@@ -52,13 +49,14 @@ export class AuthService {
       role,
     };
 
-    const accessToken = this.jwtService.sign(payload);
+    const accessToken = this.jwtService.sign(payload, {
+      expiresIn: this.configService.get<string>('JWT_EXPIRATION', '15m'),
+    });
 
     const refreshToken = this.jwtService.sign(payload, {
       expiresIn: this.configService.get<string>('JWT_REFRESH_EXPIRATION', '7d'),
     });
 
-    // Armazena o hash do refresh token no banco
     const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
     await prisma.user.update({
       where: { id: user.id },
@@ -80,10 +78,6 @@ export class AuthService {
     };
   }
 
-  /**
-   * Renova os tokens usando o refresh token.
-   * Implementa rotação de refresh token para maior segurança.
-   */
   async refreshTokens(userId: string, refreshToken: string) {
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
@@ -101,14 +95,20 @@ export class AuthService {
     return this.login(userData);
   }
 
-  /**
-   * Invalida o access token (blacklist) e remove o refresh token do banco.
-   */
   async logout(userId: string, accessToken: string) {
-    // Adiciona access token à blacklist
-    this.tokenBlacklistService.add(accessToken);
+    try {
+      const payload: any = this.jwtService.decode(accessToken);
+      if (payload && payload.exp) {
+        const expiryMs = payload.exp * 1000;
+        this.tokenBlacklistService.add(accessToken, expiryMs);
+      } else {
+        this.tokenBlacklistService.add(accessToken, Date.now() + 3600000); // 1h
+      }
+    } catch (error: any) {
+      this.logger.error(`Erro ao decodificar token no logout: ${error.message}`);
+      this.tokenBlacklistService.add(accessToken, Date.now() + 3600000);
+    }
 
-    // Remove refresh token do banco
     await prisma.user.update({
       where: { id: userId },
       data: { refreshToken: null },
@@ -119,9 +119,6 @@ export class AuthService {
     return { message: 'Logout realizado com sucesso' };
   }
 
-  /**
-   * Retorna o perfil do usuário autenticado.
-   */
   async getProfile(userId: string) {
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
