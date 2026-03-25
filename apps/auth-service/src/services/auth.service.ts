@@ -41,7 +41,7 @@ export class AuthService {
     return result;
   }
 
-  async login(user: any): Promise<LoginResponse> {
+  async login(user: any, ipAddress: string, userAgent?: string): Promise<LoginResponse> {
     const { id, email, name, role, tenantId } = user;
     const payload = {
       sub: id,
@@ -55,6 +55,21 @@ export class AuthService {
 
     const refreshToken = this.jwtService.sign(payload, {
       expiresIn: this.configService.get<string>('JWT_REFRESH_EXPIRATION', '7d'),
+    });
+
+    const isProd = this.configService.get<string>('NODE_ENV') === 'production';
+    const expiresAt = new Date(Date.now() + (isProd ? 7 * 24 * 60 * 60 * 1000 : 30 * 60 * 1000));
+
+    await prisma.activeSession.create({
+      data: {
+        userId: id,
+        email,
+        tenantId,
+        ipAddress,
+        userAgent,
+        expiresAt,
+        lastActivity: new Date(),
+      },
     });
 
     const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
@@ -78,7 +93,7 @@ export class AuthService {
     };
   }
 
-  async refreshTokens(userId: string, refreshToken: string) {
+  async refreshTokens(userId: string, refreshToken: string, ipAddress: string, userAgent?: string) {
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
     if (!user || !user.refreshToken) {
@@ -92,7 +107,7 @@ export class AuthService {
     }
 
     const { passwordHash, refreshToken: storedToken, ...userData } = user;
-    return this.login(userData);
+    return this.login(userData, ipAddress, userAgent);
   }
 
   async logout(userId: string, accessToken: string) {

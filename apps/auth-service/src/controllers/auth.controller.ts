@@ -31,16 +31,18 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(@Request() req: any, @Body() _loginDto: LoginDto) {
-    return this.authService.login(req.user);
+    const userAgent = req.headers['user-agent'];
+    return this.authService.login(req.user, req.ip, userAgent);
   }
 
   @Public()
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
-  async refresh(@Body() refreshTokenDto: RefreshTokenDto) {
+  async refresh(@Request() req: any, @Body() refreshTokenDto: RefreshTokenDto) {
     try {
       const payload = this.jwtService.verify(refreshTokenDto.refreshToken);
-      return this.authService.refreshTokens(payload.sub, refreshTokenDto.refreshToken);
+      const userAgent = req.headers['user-agent'];
+      return this.authService.refreshTokens(payload.sub, refreshTokenDto.refreshToken, req.ip, userAgent);
     } catch {
       throw new UnauthorizedException('Refresh token inválido ou expirado');
     }
