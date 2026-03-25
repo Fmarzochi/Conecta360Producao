@@ -13,6 +13,9 @@ jest.mock('@conecta360/database', () => ({
       findUnique: jest.fn(),
       update: jest.fn(),
     },
+    activeSession: {
+      create: jest.fn(),
+    },
   },
 }));
 
@@ -98,7 +101,7 @@ describe('AuthService', () => {
       (bcrypt.hash as jest.Mock).mockResolvedValue('hashed-refresh');
       (prisma.user.update as jest.Mock).mockResolvedValue({});
 
-      const result = await service.login(mockUser);
+      const result = await service.login(mockUser, '127.0.0.1', 'Mozilla/5.0');
 
       expect(result).toHaveProperty('access_token');
       expect(result).toHaveProperty('refresh_token');

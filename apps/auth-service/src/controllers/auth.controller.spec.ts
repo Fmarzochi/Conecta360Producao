@@ -21,7 +21,7 @@ import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { APP_PIPE } from '@nestjs/core';
 import { AppModule, validationPipeConfig } from '../app.module';
 
-describe('AuthController (Integration)', () => {
+describe('AuthController', () => {
   let app: INestApplication;
 
   const mockUser = {
@@ -139,7 +139,7 @@ describe('AuthController (Integration)', () => {
 
       expect(res.body).toHaveProperty('access_token');
       expect(mockJwtService.verify).toHaveBeenCalledWith('valid-refresh-token');
-      expect(mockAuthService.refreshTokens).toHaveBeenCalledWith('1', 'valid-refresh-token');
+      expect(mockAuthService.refreshTokens).toHaveBeenCalledWith('1', 'valid-refresh-token', expect.any(String), undefined);
     });
 
     it('deve retornar 401 se o refreshToken for inválido (verify lança erro)', async () => {
