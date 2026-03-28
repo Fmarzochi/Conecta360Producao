@@ -32,7 +32,6 @@ describe('CreateUserPFService', () => {
     beforeEach(() => {
         jest.clearAllMocks();
         createUserPFService = new CreateUserPFService();
-        // mockModel: UserModel as jest.Mocked<typeof UserModel>;
         jest.spyOn(mongoose, 'startSession').mockResolvedValue(mockSession as any);
     });
 

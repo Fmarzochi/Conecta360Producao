@@ -14,7 +14,7 @@ jest.mock('../src/entities/UserCompany');
 jest.mock('cpf-cnpj-validator');
 jest.mock('bcrypt');
 
-describe('CreateUserPFService', () => {
+describe('CreateUserPJService', () => {
     let createUserPjService: CreateUserPJServices;
 
     const mockSession = {
@@ -121,7 +121,7 @@ describe('CreateUserPFService', () => {
         expect(mockSession.commitTransaction).toHaveBeenCalled();
         expect(mockSession.endSession).toHaveBeenCalled();
 
-        expect(r).toEqual({ user: mockUser, company: mockCompany[0] });
+        expect(r).toEqual({ user: mockUser[0], company: mockCompany[0] });
 
         
     });
