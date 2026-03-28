@@ -14,8 +14,11 @@ export class CreateUserPFService {
         
         try {
             logger.info({ email: data.email, tenantId: data.tenantId }, 'Registro de novo usuário PF');
-            if (!cpf.isValid(data.cpf)) throw new Error("CPF Inválido");
-            logger.warn({ cpf: data.cpf }, 'Tentativa de cadastro com CPF inválido');
+
+            if (!cpf.isValid(data.cpf)) {
+                logger.warn({ cpf: data.cpf }, 'Tentativa de cadastro com CPF inválido');
+                throw new Error("CPF Inválido");
+            }
 
             const userExists = await UserModel.findOne({ email: data.email, tenantId: data.tenantId });
             if (userExists) {
@@ -48,9 +51,7 @@ export class CreateUserPFService {
             
         } catch (error: any) {
             await session.abortTransaction();
-            logger.error({ 
-                error: error.message 
-            }, 'Falha ao registrar usuário PF');
+            logger.error({ error: error.message }, 'Falha ao registrar usuário PF');
             throw error;
         } finally {
             session.endSession();
@@ -58,4 +59,3 @@ export class CreateUserPFService {
         
     }
 }
-
