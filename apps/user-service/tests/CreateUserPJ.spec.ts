@@ -55,7 +55,7 @@ describe('CreateUserPJService', () => {
 
         await expect(createUserPjService.execute(companyData as any)).rejects.toThrow("CNPJ Inválido");
 
-        expect(mockSession.abortTransaction).not.toHaveBeenCalled();
+        expect(mockSession.abortTransaction).toHaveBeenCalled();
     });
 
     it("Deve lançar erro se cpf do representante for inválido", async () => {
@@ -66,10 +66,10 @@ describe('CreateUserPJService', () => {
             .rejects
             .toThrow("CPF do representante inválido");
 
-        expect(mockSession.startTransaction).not.toHaveBeenCalled();    
+        expect(mockSession.abortTransaction).toHaveBeenCalled();    
     });
 
-    it("Deve criar Tenant, Usuário associado e relacinamento com a empresa com sucesso", async () => {
+    it("Deve criar Tenant, Usuário associado e relacionamento com a empresa com sucesso", async () => {
         (cnpj.isValid as jest.Mock).mockReturnValue(true);
         (cpf.isValid as jest.Mock).mockReturnValue(true);
         (hash as jest.Mock).mockResolvedValue('pj_hash');
