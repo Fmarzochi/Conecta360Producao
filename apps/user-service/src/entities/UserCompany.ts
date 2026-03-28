@@ -3,7 +3,7 @@ import { Document, model, Schema, Types } from 'mongoose';
 export interface IUserCompany extends Document {
     tenantId?: Types.ObjectId;
     userId: Types.ObjectId;
-    companyId: Types.ObjectId;
+    companyId?: Types.ObjectId;
     relationshipType: 'OWNER' | 'EMPLOYEE' | 'PARTNER';
     status: string;
 }

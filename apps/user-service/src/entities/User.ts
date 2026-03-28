@@ -72,4 +72,7 @@ const UserSchema = new Schema<IUser>({
     status: { type: String, default: 'ACTIVE'},
 }, { timestamps: true });
 
+UserSchema.index({ email: 1, tenantId: 1 }, { unique: true });
+
+
 export const UserModel = model<IUser>('user', UserSchema);

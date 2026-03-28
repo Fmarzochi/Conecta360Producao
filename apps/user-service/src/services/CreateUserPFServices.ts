@@ -4,6 +4,7 @@ import { UserCompanyModel } from "../entities/UserCompany";
 import { cpf } from "cpf-cnpj-validator";
 import { hash } from "bcrypt";
 import mongoose from "mongoose";
+import { logger } from "../config/logger";
 
 
 export class CreateUserPFService {
@@ -12,10 +13,13 @@ export class CreateUserPFService {
         session.startTransaction();
         
         try {
+            logger.info({ email: data.email, tenantId: data.tenantId }, 'Registro de novo usuário PF');
             if (!cpf.isValid(data.cpf)) throw new Error("CPF Inválido");
+            logger.warn({ cpf: data.cpf }, 'Tentativa de cadastro com CPF inválido');
+
             const userExists = await UserModel.findOne({ email: data.email, tenantId: data.tenantId });
-            
             if (userExists) {
+                logger.warn({ email: data.email }, 'Tentativa de cadastro com e-mail já existente');
                 throw new Error("Este usuário já existe");
             }
 
@@ -35,15 +39,23 @@ export class CreateUserPFService {
                     relationshipType: data.relationshipType || 'EMPLOYEE',
                     status: 'ACTIVE'
                 }], { session });
-                await session.commitTransaction();
-                return user;
-            }
-        } catch (error) {
-            await session.abortTransaction();
-            throw error;
-        }
-        session.endSession();
+            } 
 
+            logger.info({ tenantId: data.tenantId, userId: user._id }, 'Usuário PF registrado com sucesso');
+
+            await session.commitTransaction();
+            return user;
+            
+        } catch (error: any) {
+            await session.abortTransaction();
+            logger.error({ 
+                error: error.message 
+            }, 'Falha ao registrar usuário PF');
+            throw error;
+        } finally {
+            session.endSession();
+        }
+        
     }
 }
 

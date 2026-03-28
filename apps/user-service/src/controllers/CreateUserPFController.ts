@@ -12,8 +12,7 @@ export class CreateUserPFController {
             const user = await createUser.execute(payload);
             return res.status(201).json({ user });
         } catch (error: any) {
-            console.error("--- [PF Register] Erro detalhado:", error);
-            return res.status(400).json({ message: "Não foi possível registrar o usuário.", error})
+            return res.status(400).json({ message: "Não foi possível registrar o usuário."})
         }
 
     }
