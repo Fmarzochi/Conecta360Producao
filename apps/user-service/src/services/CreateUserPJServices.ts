@@ -10,15 +10,19 @@ import { logger } from "../config/logger";
 
 export class CreateUserPJServices {
   async execute(data: any) {
-    if (!cnpj.isValid(data.cnpj)) throw new Error("CNPJ Inválido");
-    if (!cpf.isValid(data.user.cpf)) throw new Error("CPF do representante inválido");
-    logger.warn({ cpf: data.user.cpf }, 'Tentativa de cadastro com CPF inválido');
-    
-
     const session = await mongoose.startSession();
     session.startTransaction();
-
+    
     try {
+      if (!cnpj.isValid(data.cnpj)) throw new Error("CNPJ Inválido");
+      if (!cpf.isValid(data.user.cpf)) throw new Error("CPF do representante inválido");
+      logger.warn({ cpf: data.user.cpf }, 'Tentativa de cadastro com CPF inválido');
+
+      const userExists = await UserModel.findOne({ corporateEmail: data.corporateEmail, cnpj: data.cnpj });
+      if (userExists) {
+        logger.warn({ corporateEmail: data.corporateEmail }, 'Tentativa de cadastro com e-mail corporativo já existente');
+        throw new Error("Este e-mail já existe");
+      }
       logger.info({ tradeName: data.tradeName, tenantId: data.tenantId }, 'Registro de novo usuário PJ');
       
       const [newTenant] = await TenantModel.create([{ 
@@ -54,12 +58,12 @@ export class CreateUserPJServices {
 
       await UserCompanyModel.create([{
         tenantId,
-        userId: data.user._id,
+        userId: user._id,
         companyId: company._id,
         relationshipType: 'OWNER',
         status: 'ACTIVE'
       }], { session });
-      logger.info({ userId: data.user._id, companyId: company._id }, 'UserCompany criado com sucesso');
+      logger.info({ userId: user._id, companyId: company._id }, 'UserCompany criado com sucesso');
 
       await session.commitTransaction();
             
