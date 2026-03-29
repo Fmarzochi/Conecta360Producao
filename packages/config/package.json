@@ -1,0 +1,15 @@
+{
+  "name": "@conecta360/config",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "dotenv": "^16.6.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

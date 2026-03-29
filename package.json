@@ -1,0 +1,14 @@
+{
+  "name": "conecta360-backend",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "db:generate": "npm run generate -w @conecta360/database",
+    "db:push": "npx prisma db push --schema=packages/database/prisma/schema.prisma",
+    "db:studio": "npx prisma studio --schema=packages/database/prisma/schema.prisma"
+  }
+}

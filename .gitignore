@@ -100,6 +100,7 @@ appendonly.aof
 docker-data/
 docker-volumes/
 .docker/
+infra/docker/backups/
 
 #################################################
 # CERTIFICATES / KEYS
@@ -153,6 +154,12 @@ public/uploads/
 *.swo
 *~
 .fleet/
+
+#################################################
+# AGENTIC TOOLS
+#################################################
+
+.agents/
 
 #################################################
 # OPERATING SYSTEM FILES
