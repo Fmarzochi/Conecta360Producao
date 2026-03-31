@@ -15,7 +15,7 @@ Apenas a branch principal (main/master) de produção recebe patches de seguran�
 **NÃO abra Issues públicas para reportar vulnerabilidades de segurança.**
 
 Se você identificar qualquer brecha, envie um e-mail imediatamente para o mantenedor:
-- **Contato:** [Seu E-mail de Suporte Aqui]
+- **Contato:** fmarzochi@gmail.com
 
 Seguimos o protocolo de "Responsible Disclosure":
 1. Confirmaremos o recebimento em até 24 horas.
